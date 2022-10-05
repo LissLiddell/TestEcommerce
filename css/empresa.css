@@ -1,0 +1,38 @@
+#centrador{
+    text-align: center;
+    width: 400px;
+    height: 400px;
+    background-color: red;
+  }
+  
+  #imagen{
+    width: 50%;
+    height: 50%;
+  }
+
+  /* #imagen:hover{
+    width: 151%;
+    height: 100%;
+    margin-left: -85px;
+}  */
+img.zoom {
+  width: 188px;
+  height: 141px;
+  -webkit-transition: all .2s ease-in-out;
+  -moz-transition: all .2s ease-in-out;
+  -o-transition: all .2s ease-in-out;
+  -ms-transition: all .2s ease-in-out;
+}
+
+.transition {
+  -webkit-transform: scale(1.8); 
+  -moz-transform: scale(1.8);
+  -o-transform: scale(1.8);
+  transform: scale(1.8);
+}
+
+input{
+  text-transform: uppercase;
+}
+
+

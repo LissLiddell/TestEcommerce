@@ -1,0 +1,82 @@
+.ez-slider .easyzoom .easyzoom-flyout {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* Slide demo css not needed */
+
+.ez-slider {
+  max-width: 400px;
+  margin: 0 auto 20px auto !important;
+}
+
+.ez-slider FIGURE {
+  margin: 0;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+.ez-slider FIGURE > A {
+  height: auto;
+  display: block;
+  width: 100%;
+}
+
+.ez-slider FIGURE > A > IMG {
+  height: auto;
+  width: 100%;
+  display: block;
+}
+
+.ez-slider .slick-dots {
+  margin: 10px -5px 0 -5px;
+  position: relative;
+  bottom: 0;
+  width: auto;
+  display: block;
+  
+}
+
+.ez-slider .slick-dots LI {
+  width: calc(20% - 10px);
+  height: auto;
+  margin: 0 0 10px 0;
+  padding: 0 5px 0 5px;
+  display: inline-block;
+}
+
+.ez-slider .slick-dots LI.slick-active BUTTON,
+.ez-slider .slick-dots LI:hover BUTTON {
+  opacity: 1;
+}
+
+.ez-slider .slick-dots LI BUTTON {
+  overflow: hidden;
+  position: relative;
+  height: auto;
+  padding: 0;
+  transition: all .5s ease;
+  width: 100%;
+  opacity: .8;
+}
+
+.ez-slider .slick-dots LI BUTTON IMG {
+  display: block;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.ez-slider .slick-dots LI BUTTON:before {
+  display: block;
+  position: relative;
+  content: '';
+  width: 100%;
+  padding-top: 100%;
+  height: auto;
+}
