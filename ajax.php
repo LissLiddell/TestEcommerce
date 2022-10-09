@@ -1,6 +1,6 @@
 <?php
 include_once("conn.php");
-//nclude_once("index.php");
+
 $con = conect();
 $business = new business;
 //echo($_POST['op']);
