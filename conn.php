@@ -1,5 +1,5 @@
 <?php
-    function conexion()
+    function conect()
     {
         $servername = "localhost";
         $database = "emp";

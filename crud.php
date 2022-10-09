@@ -1,7 +1,7 @@
 <?php
-include_once("conexion.php");
+include_once("conn.php");
 //include_once("index.php");
-$con = conexion();
+$con = conect();
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }

@@ -1,36 +1,36 @@
 <?php
-include_once("conexion.php");
+include_once("conn.php");
 //nclude_once("index.php");
-$con = conexion();
-$empresa = new empresa;
+$con = conect();
+$business = new business;
 //echo($_POST['op']);
 switch ($_REQUEST['op']) {
     case 'AccesoBD':
-        echo json_encode($empresa->AccesoBDUser($_POST['usuario'], $_POST['password']));
+        echo json_encode($business->AccessBDUser($_POST['usuario'], $_POST['password']));
         break;
     case 'GuardarUsuario':
-        echo json_encode($empresa->GuardarUsuarioBD($_REQUEST));
+        echo json_encode($business->SaveUserBD($_REQUEST));
         break;
     case 'MostrarDatos':
-        echo json_encode($empresa->MostrarDatosDB($_POST['Id']));
+        echo json_encode($business->ShowDataDB($_POST['Id']));
         break;
     case 'EliminarUsuario':
-        echo json_encode($empresa->EliminarUsuarioBD($_POST['Id']));
+        echo json_encode($business->DeleteUsesBD($_POST['Id']));
         break;
     case 'ListaUsuarios':
-        echo json_encode($empresa->ListaUsuarios());
+        echo json_encode($business->UserList());
         break;
     case 'ActualizarUsuario':
-        echo json_encode($empresa->ActualizarUsuarioBD($_REQUEST));
+        echo json_encode($business->UpdateUserBD($_REQUEST));
         break;
     case 'SaveFile':
-        echo json_encode($empresa->SaveFile($_FILES['file'], $_REQUEST['user_id']));
+        echo json_encode($business->SaveFile($_FILES['file'], $_REQUEST['user_id']));
         break;
     case 'ExportUserPdf':
-        echo json_encode($empresa->UserExportpdf($_POST['id']));
+        echo json_encode($business->UserExportpdf($_POST['id']));
         break;
     case 'ShowInfo':
-            echo ($empresa->ShowInfo($_POST['Id']));
+            echo ($business->ShowInfo($_POST['Id']));
             break;
     default:
         echo 'Error';
@@ -46,7 +46,7 @@ class Database
         return $pdo;
     }
 }
-class usuario
+class User
 {
     private $pdo;
     public $id;
@@ -67,7 +67,7 @@ class usuario
         }
     }
 
-    public function Listar()
+    public function Show()
     {
         try {
             $result = array();
@@ -80,7 +80,7 @@ class usuario
         }
     }
 
-    public  function Acceso($usuario, $password)
+    public  function Access($usuario, $password)
     {
         try {
             $result = array();
@@ -92,7 +92,7 @@ class usuario
         }
     }
 
-    public function Obtener($id)
+    public function GetUser($id)
     {
         try {
             $stm = $this->pdo
@@ -106,7 +106,7 @@ class usuario
         }
     }
 
-    public function Actualizar($data)
+    public function UpdateUser($data)
     {
         try {
             $sql = "UPDATE usuarios SET nombre = ?, apellidoPaterno = ?, 
@@ -129,7 +129,7 @@ class usuario
         }
     }
 
-    public function ActualizarImg($imgContenido, $user_id)
+    public function UpdateImg($imgContenido, $user_id)
     {
         $fp = fopen($imgContenido,'rb');
         try {
@@ -145,7 +145,7 @@ class usuario
         }
     }
 
-    public function Eliminar($data)
+    public function Delete($data)
     {
         try {
             $sql = "UPDATE usuarios SET Estatus = ? WHERE Id = ?";
@@ -158,7 +158,7 @@ class usuario
         }
     }
 
-    public function Registrar(usuario $data)
+    public function InsertUser(User $data)
     {
         try {
             $sql = "INSERT INTO usuarios (nombre, apellidoPaterno ,apellidoMaterno, email, password, domicilio,codigopostal) 
@@ -195,13 +195,13 @@ class usuario
 }
 
 
-class empresa
+class business
 {
     private $model;
 
     public function __CONSTRUCT()
     {
-        $this->model = new usuario();
+        $this->model = new User();
     }
 
     public function UserExportpdf($id)
@@ -215,19 +215,19 @@ class empresa
         $revisar = getimagesize($_FILES["file"]["tmp_name"]);
         if ($revisar !== false) {
             $image = $_FILES['file']['tmp_name'];
-            $this->model->ActualizarImg($image, $user_id);
+            $this->model->UpdateImg($image, $user_id);
             return true;
         } else {
             return false;
         }
     }
 
-    public function AccesoBDUser($usuario, $password)
+    public function AccessBDUser($usuario, $password)
     {
         $total = 0;
         $nombre = "";
         $id = 0;
-        $r = $this->model->Acceso($usuario, $password); 
+        $r = $this->model->Access($usuario, $password); 
         $total  = $r->total;
         $nombre =  $r->Nombre;
         $id = $r->Id;
@@ -245,7 +245,7 @@ class empresa
        
     }
 
-    public function GuardarUsuarioBD($form)
+    public function SaveUserBD($form)
     {
         $ConfirmarEmail =  (filter_var($form['email'], FILTER_VALIDATE_EMAIL) ? 1 : 2).PHP_EOL;
         //return false;
@@ -276,7 +276,7 @@ class empresa
             return "CODIGOPOSTAL";
         }
 
-        $usuario = new usuario();
+        $usuario = new User();
         $usuario->nombre = $form['nombre'];
         $usuario->apellidoPaterno = $form['apellidoPaterno'];
         $usuario->apellidoMaterno = $form['apellidoMaterno'];
@@ -284,21 +284,21 @@ class empresa
         $usuario->password = $form['password'];
         $usuario->domicilio = $form['domicilio'];
         $usuario->codigopostal = $form['codigopostal'];
-        $this->model->Registrar($usuario);
+        $this->model->InsertUser($usuario);
         return true;
     }
 
-    public function EliminarUsuarioBD($id)
+    public function DeleteUsesBD($id)
     {
         $valores = ["Estatus" => 2, "Id"=>$id];
-        $this->model->Eliminar($valores);
+        $this->model->Delete($valores);
         return true;
     }
 
-    public function MostrarDatosDB($id)
+    public function ShowDataDB($id)
     {
-        $usuario = new usuario();
-        $usuario = $this->model->Obtener($id);
+        $usuario = new User();
+        $usuario = $this->model->GetUser($id);
         $id = $usuario->Id;
         $email = $usuario->email;
         $nombre = $usuario->nombre;
@@ -310,7 +310,7 @@ class empresa
         return $array;
     }
 
-    public function ActualizarUsuarioBD($form)
+    public function UpdateUserBD($form)
     {
         $ConfirmarEmail =  (filter_var($form['aemail'], FILTER_VALIDATE_EMAIL) ? 1 : 2).PHP_EOL;
         if ($form['anombre'] == "") {
@@ -329,21 +329,21 @@ class empresa
             return 'DOMICILIO';
         }
       
-        $user = new usuario();
+        $user = new User();
         $user->nombre = $form['anombre'];
         $user->apellidoPaterno = $form['aapellidoPaterno'];
         $user->apellidoMaterno = $form['aapellidoMaterno'];
         $user->email = $form['aemail'];
         $user->domicilio = $form['adomicilio'];
         $user->id = $form['id'];
-        $this->model->Actualizar($user);
+        $this->model->UpdateUser($user);
         return true;
     }
 
-    public function ListaUsuarios()
+    public function UserList()
     {
         $values = [];
-        foreach ($this->model->Listar() as $r) {
+        foreach ($this->model->Show() as $r) {
             $valores = ["Id" => $r->id, "nombre" => $r->nombre, "apellidoPaterno" => $r->apellidoPaterno, "apellidoMaterno" => $r->apellidoMaterno, "email" => $r->email, "domicilio" => $r->domicilio];
             array_push($values, $valores);
         }

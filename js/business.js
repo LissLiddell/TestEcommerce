@@ -11,8 +11,7 @@ $(document).on('mousemove keydown click', function() {
     }
 }); 
 
-/*var estaciones =  {'Uva':97.5, 'Poderoza':107.7, 'Invasora':98.9};
-console.log(estaciones)*/
+
 
 $('#errorname').hide();
 $('#errorAP').hide();
